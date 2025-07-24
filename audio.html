@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Phát âm thanh theo phím và nút</title>
+</head>
+<body>
+  <h2>Nhấn phím 1–9 hoặc nhấn nút để phát âm thanh</h2>
+  <h2>Nhấn Space để dừng lại!</h2>
+   <link rel="stylesheet" href="style.css">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <!-- Các nút điều khiển -->
+  <div>
+    <div class="sound-line">
+    <span>Khúc đầu bình yên (nhạc nhẹ nhàng): Phím 1 </span>
+    <button onclick="playSound(1)">🔊 Phát 1</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn Sa-tan thách thức Chúa (nhạc căng thẳng): Phím 2</span>
+    <button onclick="playSound(2)">🔊 Phát 2</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn sử giả đến báo tin (tiếng ngựa chạy): Phím 3</span>
+    <button onclick="playSound(3)">🔊 Phát 3</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn hoạn nạn xảy ra: Phím 4</span>
+    <button onclick="playSound(4)">🔊 Phát 4</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn cầu nguyện của Gióp: Phím 5</span>
+    <button onclick="playSound(5)">🔊 Phát 5</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn gia đình bị lở loét (tiếng gãi): Phím 6</span>
+    <button onclick="playSound(6)">🔊 Phát 6</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn nhạc buồn sau hoạn nạn: Phím 7</span>
+    <button onclick="playSound(7)">🔊 Phát 7</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn Chúa phán (nhạc hào hùng): Phím 8</span>
+    <button onclick="playSound(8)">🔊 Phát 8</button><br><br>
+    </div>
+    <div class="sound-line">
+    <span>Đoạn kết: Phím 9</span>
+    <button onclick="playSound(9)">🔊 Phát 9</button><br><br>
+    </div>
+    <button onclick="stopAllSounds()">⏹️ Dừng lại</button>
+  </div>
+
+  <!-- Các file âm thanh -->
+  <audio id="sound1" src="audio/nhacnhenhang.m4a"></audio>
+  <audio id="sound2" src="audio/nhacsatanthachthuc.m4a"></audio>
+  <audio id="sound3" src="audio/tiengnguachay.mp3"></audio>
+  <audio id="sound4" src="audio/chientranh.m4a"></audio>
+  <audio id="sound5" src="audio/amthanhcaunguyen.mp3"></audio>
+  <audio id="sound6" src="audio/gai (2).m4a"></audio>
+  <audio id="sound7" src="audio/nhacbuon.mp3"></audio>
+  <audio id="sound8" src="audio/nhacchuaphan.m4a"></audio>
+  <audio id="sound9" src="audio/doanket.m4a"></audio>
+
+ <script>
+  const sounds = [ 
+    null,
+    document.getElementById('sound1'),
+    document.getElementById('sound2'),
+    document.getElementById('sound3'),
+    document.getElementById('sound4'),
+    document.getElementById('sound5'),
+    document.getElementById('sound6'),
+    document.getElementById('sound7'),
+    document.getElementById('sound8'),
+    document.getElementById('sound9')
+  ];
+
+  let currentSound = null;
+
+  function stopAllSounds() {
+    if (currentSound) {
+      currentSound.pause();
+      currentSound.currentTime = 0;
+      currentSound.onended = null; // Hủy lặp lại
+      currentSound = null;
+    }
+  }
+
+  function playSound(num) {
+    stopAllSounds(); // Dừng âm thanh cũ
+    const sound = sounds[num];
+    sound.currentTime = 0;
+    sound.play();
+    currentSound = sound;
+
+    // Gán sự kiện lặp lại khi âm thanh kết thúc
+    sound.onended = () => {
+      if (currentSound === sound) {
+        sound.currentTime = 0;
+        sound.play();
+      }
+    };
+  }
+
+  document.addEventListener('keydown', function(event) {
+    const key = parseInt(event.key);
+    if (key >= 1 && key <= 9) {
+      playSound(key);
+    } else if (event.code === 'Space') {
+      event.preventDefault();
+      stopAllSounds();
+    }
+  });
+</script>
+
+
+</body>
+</html>
