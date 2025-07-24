@@ -63,10 +63,11 @@
   <audio id="sound8" src="audio/nhacchuaphan.m4a"></audio>
   <audio id="sound9" src="audio/doanket.m4a"></audio>
 
-  <script>
-  // Mảng âm thanh từ 1 đến 9
+  
+  
+<script>
   const sounds = [
-    null, // chỉ mục 0 không dùng
+    null,
     document.getElementById('sound1'),
     document.getElementById('sound2'),
     document.getElementById('sound3'),
@@ -78,31 +79,44 @@
     document.getElementById('sound9')
   ];
 
-  // Dừng tất cả âm thanh
+  let currentSound = null;
+
   function stopAllSounds() {
-    for (let i = 1; i <= 9; i++) {
-      sounds[i].pause();
-      sounds[i].currentTime = 0;
+    if (currentSound) {
+      currentSound.pause();
+      currentSound.currentTime = 0;
+      currentSound.onended = null; // Hủy lặp lại
+      currentSound = null;
     }
   }
 
-  // Phát âm thanh số tương ứng
   function playSound(num) {
-    stopAllSounds();
-    sounds[num].play();
+    stopAllSounds(); // Dừng âm thanh cũ
+    const sound = sounds[num];
+    sound.currentTime = 0;
+    sound.play();
+    currentSound = sound;
+
+    // Gán sự kiện lặp lại khi âm thanh kết thúc
+    sound.onended = () => {
+      if (currentSound === sound) {
+        sound.currentTime = 0;
+        sound.play();
+      }
+    };
   }
 
-  // Bắt sự kiện bàn phím
   document.addEventListener('keydown', function(event) {
     const key = parseInt(event.key);
     if (key >= 1 && key <= 9) {
       playSound(key);
     } else if (event.code === 'Space') {
-      event.preventDefault(); // Ngăn cuộn trang khi nhấn space
+      event.preventDefault();
       stopAllSounds();
     }
   });
 </script>
+
 
 </body>
 </html>
